@@ -35,12 +35,11 @@ def control_menu(stdscr):
             elif menu[current_row_id] == 'Play':
                 i = 0
                 j = 0
-                grid = Grid(5, 5)
-                while(grid.flows < grid.rows-3):
+                grid = Grid(5)
+                while(grid.flows < grid.size):
                     grid.print_grid(stdscr, i, j)
                     key = stdscr.getch()
                     i, j = grid.grid_control(key, i, j)
-
         print_menu(stdscr, current_row_id)
 
 
