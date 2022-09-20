@@ -1,7 +1,5 @@
 import curses
 from Grid import Grid
-COLORS = [curses.COLOR_BLUE, curses.COLOR_CYAN,
-          curses.COLOR_GREEN, curses.COLOR_MAGENTA, curses.COLOR_YELLOW]
 TEXT = "Flow Free"
 menu = ['Play',  'Exit']
 
@@ -35,8 +33,8 @@ def control_menu(stdscr):
             elif menu[current_row_id] == 'Play':
                 i = 0
                 j = 0
-                grid = Grid(5)
-                while(grid.flows < grid.size):
+                grid = Grid()
+                while(grid.cont < grid.flows):
                     grid.print_grid(stdscr, i, j)
                     key = stdscr.getch()
                     i, j = grid.grid_control(key, i, j)
@@ -45,11 +43,13 @@ def control_menu(stdscr):
 
 def main(stdscr):
     curses.curs_set(0)
+    curses.start_color()
+    curses.use_default_colors()
     curses.init_pair(1, curses.COLOR_RED, curses.COLOR_WHITE)
     curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_WHITE)
     curses.init_pair(3, curses.COLOR_BLACK, curses.COLOR_WHITE)
-    for i in range(0, len(COLORS)):
-        curses.init_pair(i+4, COLORS[i], COLORS[i])
+    for i in range(3, curses.COLORS):
+        curses.init_pair(i + 1, i, i)
     control_menu(stdscr)
 
 
