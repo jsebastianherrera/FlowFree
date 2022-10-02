@@ -28,7 +28,7 @@ https://user-images.githubusercontent.com/66764041/193470709-a566c86d-aedb-492b-
   </tr>
   <tr>
     <td>Enter </td>
-    <td>Select current colour(It only works with main points)/td>
+    <td>Select current colour(It only works with main points)</td>
   </tr>
   <tr>
     <td>Ctrl + c </td>
