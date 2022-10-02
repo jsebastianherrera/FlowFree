@@ -1,17 +1,39 @@
 <h2>Flow Free with <strong>Curses's Python library</strong> </h2>
 <p>Simple implementation of the FlowFree game</p>
-<p>The implementation is not finished yet I'm still missing some validations</p>
 <h3>Demo</h3>
 
+https://user-images.githubusercontent.com/66764041/193470709-a566c86d-aedb-492b-bde9-7441222647bb.mp4
 
+<h2>How to play ?</h2>
+<table>
+  <tr>
+    <th>Key/keys</th>
+    <th>Summary</th>
+  </tr>
+  <tr>
+    <td>Arrow left</td>
+    <td>Move left</td>
+  </tr>
+  <tr>
+    <td>Arrow right</td>
+    <td>Move right</td>
+  </tr>
+  <tr>
+    <td>Arrow up</td>
+    <td>Move up</td>
+  </tr>
+  <tr>
+    <td>Arrow down</td>
+    <td>Move down</td>
+  </tr>
+  <tr>
+    <td>Enter </td>
+    <td>Select current colour(It only works with main points)</td>
+  </tr>
+  <tr>
+    <td>Ctrl + c </td>
+    <td>Send signal to go back to the main menu and finish current game</td>
+  </tr>
 
-https://user-images.githubusercontent.com/66764041/191170211-7867ee90-0671-4040-b696-a861948c6d8a.mp4
+</table>
 
-
-
-
-
-<h3>Grid generation</h3>
-<a href="https://imgbb.com/"><img src="https://i.ibb.co/DGGqzVS/2022-09-19-232103-scrot.png" alt="2022-09-19-232103-scrot" border="0"></a>
-<h3>Playing</h3>
-<a href="https://imgbb.com/"><img src="https://i.ibb.co/WPNq3Sh/2022-09-19-231536-scrot.png" alt="2022-09-19-231536-scrot" border="0"></a>
