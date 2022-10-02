@@ -32,7 +32,7 @@ https://user-images.githubusercontent.com/66764041/193470709-a566c86d-aedb-492b-
   </tr>
   <tr>
     <td>Ctrl + c </td>
-    <td>Send signal to go back to the main menu</td>
+    <td>Send signal to go back to the main menu and finish current game</td>
   </tr>
 
 </table>
