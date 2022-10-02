@@ -1,7 +1,15 @@
 import curses
+import signal
+# from time import sleep
 from Grid import Grid
 TEXT = "Flow Free"
 menu = ['Play',  'Exit']
+interrupted = False
+
+
+def handler(signum, frame):
+    global interrupted
+    interrupted = True
 
 
 def print_menu(stdscr, selected_row_id):
@@ -20,7 +28,9 @@ def print_menu(stdscr, selected_row_id):
 def control_menu(stdscr):
     current_row_id = 0
     print_menu(stdscr, current_row_id)
+    global interrupted
     while True:
+        interrupted = False
         key = stdscr.getch()
         stdscr.clear()
         if key == curses.KEY_UP and current_row_id > 0:
@@ -34,7 +44,7 @@ def control_menu(stdscr):
                 i = 0
                 j = 0
                 grid = Grid()
-                while(grid.cont < grid.flows):
+                while(not grid.finished() and not interrupted):
                     grid.print_grid(stdscr, i, j)
                     key = stdscr.getch()
                     i, j = grid.grid_control(key, i, j)
@@ -42,6 +52,7 @@ def control_menu(stdscr):
 
 
 def main(stdscr):
+    signal.signal(signal.SIGINT, handler)
     curses.curs_set(0)
     curses.start_color()
     curses.use_default_colors()
@@ -49,7 +60,7 @@ def main(stdscr):
     curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_WHITE)
     curses.init_pair(3, curses.COLOR_BLACK, curses.COLOR_WHITE)
     for i in range(3, curses.COLORS):
-        curses.init_pair(i + 1, i, i)
+        curses.init_pair(i + 1, curses.COLOR_BLACK, i)
     control_menu(stdscr)
 
 
