@@ -12,11 +12,11 @@ https://user-images.githubusercontent.com/66764041/193470709-a566c86d-aedb-492b-
   </tr>
   <tr>
     <td>Arrow left</td>
-    <td>Move to the left</td>
+    <td>Move left</td>
   </tr>
   <tr>
     <td>Arrow right</td>
-    <td>Move to the right</td>
+    <td>Move right</td>
   </tr>
   <tr>
     <td>Arrow up</td>
