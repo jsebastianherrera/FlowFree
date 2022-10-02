@@ -4,10 +4,10 @@
 
 https://user-images.githubusercontent.com/66764041/193470709-a566c86d-aedb-492b-bde9-7441222647bb.mp4
 
-<p>How to play ?</p>
+<h2>How to play ?</h2>
 <table>
   <tr>
-    <th>Key</th>
+    <th>Key/keys</th>
     <th>Summary</th>
   </tr>
   <tr>
@@ -26,5 +26,10 @@ https://user-images.githubusercontent.com/66764041/193470709-a566c86d-aedb-492b-
     <td>Arrow down</td>
     <td>Move one row down</td>
   </tr>
+  <tr>
+    <td>Ctrl + c </td>
+    <td>Send signal to go back to the main menu</td>
+  </tr>
+
 </table>
 
