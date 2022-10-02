@@ -1,11 +1,6 @@
-from random import randint
-
-
 class Point:
-    def __init__(self, colour: int, x: int, y: int, main=True, random=False):
+    def __init__(self, colour: int, x: int, y: int, main=True):
         self.colour = colour
-        if random:
-            x, y = self._randomize_point(x, y)
         self.x = x
         self.y = y
         self.main = main
@@ -18,6 +13,3 @@ class Point:
             return True
         else:
             return False
-
-    def _randomize_point(self, row, col) -> tuple[int, int]:
-        return randint(0, row-1), randint(0, col - 1)

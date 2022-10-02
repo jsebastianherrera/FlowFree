@@ -5,23 +5,16 @@ from Point import Point
 
 
 class Grid:
-    def __init__(self, flows=0, row=0, col=0, random_points=False):
+    def __init__(self):
         self._List = [i for i in range(4, 254)]
-        self.flows = flows
         self.cont = 0
         self._enter = (False, None)
-        self.rows = row
-        self.cols = col
         self._points = {}
         self.starting_points = []
+        list = [i for i in range(1, 19)]
+        self._read_file(random.choice(list))
         self.grid = [[None for _ in range(self.rows)]
                      for _ in range(self.cols)]
-        if random_points:
-            self._colors = random.choices(self._List, k=flows)
-            self._randomize_starting_points()
-        else:
-            list = [i for i in range(1, 19)]
-            self._read_file(random.choice(list))
         self._init_grid()
 
     def _read_file(self, number):
@@ -163,17 +156,3 @@ class Grid:
     def _init_grid(self):
         for p in self.starting_points:
             self.grid[p.x][p.y] = p
-
-    def _randomize_starting_points(self) -> None:
-        for i in range(self.flows):
-            cont = 0
-            c = list()
-            while cont < 2:
-                p = Point(self._colors[i], self.rows, self.cols, random=True)
-                if p not in self.starting_points:
-                    self.starting_points.append(p)
-                    # Point , state ---> False: no connected
-                    c.append((p, False))
-                    cont += 1
-            # first element
-            self._points[c[0][0].colour] = c
