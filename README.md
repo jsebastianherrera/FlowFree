@@ -20,11 +20,11 @@ https://user-images.githubusercontent.com/66764041/193470709-a566c86d-aedb-492b-
   </tr>
   <tr>
     <td>Arrow up</td>
-    <td>Move one row up</td>
+    <td>Move up</td>
   </tr>
   <tr>
     <td>Arrow down</td>
-    <td>Move one row down</td>
+    <td>Move down</td>
   </tr>
   <tr>
     <td>Enter </td>
