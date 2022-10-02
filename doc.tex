@@ -1,0 +1,124 @@
+\documentclass[letter]{article}
+\usepackage[spanish]{babel}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx, color}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{mathrsfs}
+
+
+% Some definitions
+\floatname{algorithm}{Algoritmo}
+
+% Author info
+\title {Flow Free}
+\author{ Jorge Luis Esposito Albornoz$^1$  Juan Sebastián Herrera Guaitero$^1$}
+\date{
+	$^1$Departamento de Ingeniería de Sistemas, Pontificia Universidad Javeriana\\Bogotá,  Colombia \\
+	\texttt{\{jesposito,jsebastianherrera\}@javeriana.edu.co}\\~\\
+	\today
+}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+	En este documento se presenta la documentaci\'on correspondiente a la implementaci\'on desarrollada para realizar el videojuego FlowFree.
+	\textbf{Palabras clave:} Flow, puzzle.
+\end{abstract}
+
+\tableofcontents
+
+\newpage
+\section{Formalización del problema}
+Un rompecabezas o puzzle  es un juego cuyo objetivo es formar una figura combinando correctamente las partes de esta, que se encuentran en distintos pedazos o en nuestro caso en particual que se compone de diferentes ``Flows''.
+
+\subsection{Definici\'on del problema}
+El juego presenta rompecabezas de enlaces numéricos. Cada rompecabezas tiene una cuadrícula de cuadrados con pares de puntos de colores que ocupan algunos de los cuadrados.
+El objetivo es conectar puntos del mismo color dibujando ``tuber\'ias'' entre ellos de forma que toda la cuadrícula esté ocupada por tuberías. Sin embargo, las tuberías no pueden cruzarse. La dificultad viene determinada principalmente por el tamaño de la cuadrícula.\\\\
+Flow free se define apartir de:
+\begin{enumerate}
+	\item Dada un matriz de $M$ de elementos $a \in \mathbb{Z} $, donde cada elemento representa un color en la cuadr\'icula .
+\end{enumerate}
+Permita a trav\'es de la consola completar los ``flows'' o ``tuberias'' teniendo en cuenta las reglas anteriormente descritas.
+\begin{itemize}
+	\item \textbf{Entradas:}
+	      \begin{itemize}
+		      \item $M^{nxn} ~ | ~ \forall M_{ij} \in \mathbb{Z}$
+	      \end{itemize}
+	\item \textbf{Salida:}
+\end{itemize}
+\section{Implementaci\'on}
+\subsection{Modelado de datos}
+En esta secci\'on se presetar\'a las estructuras de datos utilizadas para la soluci\'on.
+\subsubsection{Diagrama de clases}
+\begin{figure}[H]
+	\centerline{\includegraphics[scale=0.50]{Class Diagram.jpg}}
+	\caption{Diagrama de clases}
+	\label{fig}
+\end{figure}
+\newpage
+\subsubsection{Diagrama de flujo}
+Toca hacerlo
+\section{Como jugar}
+\subsubsection{Keybinding}
+\begin{center}
+	\begin{tabular}{ |c|c| }
+		\hline
+		\textbf{Tecla/Teclas} & \textbf{Funciones}                                                \\
+		\hline
+		Flecha izquierda      & Moverse una columna hacia la izquierda                            \\
+		\hline
+		Flecha derecha        & Moverse una columna hacia la derecha                              \\
+		\hline
+		Flecha arriba         & Moverse una fila hacia arriba                                     \\
+		\hline
+		Flecha abajo          & Moverse una fila hacia abajo                                      \\
+		\hline
+		Enter                 & Seleccionar el color actual(solo funciona con puntos principales) \\
+		\hline
+		Ctrl + c              & Enviar un signal para volver al menur principal)                  \\
+		\hline
+	\end{tabular}
+\end{center}
+\subsubsection{Protocolo}
+\begin{enumerate}
+	\item Dirigase a la ruta en donde se encuentra el proyecto con nombre FlowFree.
+	\item Asegurese de tener python3 instalado y contar con las siguiente libreria :
+	      \begin{itemize}
+		      \item \textbf{Linux:}
+		            \begin{itemize}
+			            \item curses
+		            \end{itemize}
+		      \item \textbf{Windows:}
+		            \begin{itemize}
+			            \item windows-curses
+		            \end{itemize}
+	      \end{itemize}
+	      En caso de no tenerla, instalarla de la siguiente forma: $$
+		      pip ~ install ~  ``nombre\_paquete''$$
+	\item Ejecutar el siguiente comando: $$ python3 ~ main.py$$
+	      \begin{figure}[H]
+		      \centerline{\includegraphics[scale=0.40]{menu.jpg}}
+		      \caption{Menu principal}
+		      \label{fig}
+	      \end{figure}
+	      Moverse de acuerdo a las Keybindings para elegir una opci\'on con la tecla ``enter''.
+	      \begin{itemize}
+		      \item \textbf{play}: Se gener\'a un n\'umero aleatorio para elegir un archivo del 1-22.
+		            \begin{figure}[H]
+			            \centerline{\includegraphics[scale=0.40]{map.jpg}}
+			            \caption{Mapa}
+			            \label{fig}
+		            \end{figure}
+		      \item \textbf{exit}: El proceso se termina.
+	      \end{itemize}
+
+
+\end{enumerate}
+\end{document}
+
