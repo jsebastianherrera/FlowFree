@@ -2,15 +2,29 @@
 <p>Simple implementation of the FlowFree game</p>
 <h3>Demo</h3>
 
-
-
-https://user-images.githubusercontent.com/66764041/191170211-7867ee90-0671-4040-b696-a861948c6d8a.mp4
+https://user-images.githubusercontent.com/66764041/193470709-a566c86d-aedb-492b-bde9-7441222647bb.mp4
 
 <p>How to play ?</p>
+<table>
+  <tr>
+    <th>Key</th>
+    <th>Summary</th>
+  </tr>
+  <tr>
+    <td>Arrow left</td>
+    <td>Move to the left</td>
+  </tr>
+  <tr>
+    <td>Arrow right</td>
+    <td>Move to the right</td>
+  </tr>
+  <tr>
+    <td>Arrow up</td>
+    <td>Move one row up</td>
+  </tr>
+  <tr>
+    <td>Arrow down</td>
+    <td>Move one row down</td>
+  </tr>
+</table>
 
-
-
-<h3>Grid generation</h3>
-<a href="https://imgbb.com/"><img src="https://i.ibb.co/DGGqzVS/2022-09-19-232103-scrot.png" alt="2022-09-19-232103-scrot" border="0"></a>
-<h3>Playing</h3>
-<a href="https://imgbb.com/"><img src="https://i.ibb.co/WPNq3Sh/2022-09-19-231536-scrot.png" alt="2022-09-19-231536-scrot" border="0"></a>
