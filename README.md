@@ -1,13 +1,12 @@
 <h2>Flow Free with <strong>Curses's Python library</strong> </h2>
 <p>Simple implementation of the FlowFree game</p>
-<p>The implementation is not finished yet I'm still missing some validations</p>
 <h3>Demo</h3>
 
 
 
 https://user-images.githubusercontent.com/66764041/191170211-7867ee90-0671-4040-b696-a861948c6d8a.mp4
 
-
+<p>How to play ?</p>
 
 
 
