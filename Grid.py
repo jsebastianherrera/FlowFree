@@ -179,6 +179,7 @@ class Grid:
                     c[1] = (c[1][0], True)
                 self._points[p.colour] = c
             else:
+                self.clean_grid(self._enter[1].colour)
                 self._enter = (False, None)
         self._check_grid()
         return i, j
