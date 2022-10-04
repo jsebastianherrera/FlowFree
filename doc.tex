@@ -48,9 +48,12 @@ Permita a trav\'es de la consola completar los ``flows'' o ``tuberias'' teniendo
 \begin{itemize}
 	\item \textbf{Entradas:}
 	      \begin{itemize}
-		      \item $M^{nxn} ~ | ~ \forall M_{ij} \in \mathbb{Z}$
+		      \item $M^{nxn} ~ | ~ \forall M_{ij} \in \mathbb{Z} | \exists $
 	      \end{itemize}
 	\item \textbf{Salida:}
+	      \begin{itemize}
+		      \item $M^{nxn} ~ | ~ \forall M_{ij}, M_{ij} \neq 0 $
+	      \end{itemize}
 \end{itemize}
 \section{Implementaci\'on}
 \subsection{Modelado de datos}
@@ -62,9 +65,15 @@ En esta secci\'on se presetar\'a las estructuras de datos utilizadas para la sol
 	\label{fig}
 \end{figure}
 \newpage
-\subsubsection{Diagrama de flujo}
-Toca hacerlo
-\section{Como jugar}
+\subsubsection{Diagrama de secuencia}
+\vspace{1cm}
+\begin{figure}[H]
+	\centerline{\includegraphics[scale=0.40]{sequence.jpg}}
+	\caption{Diagrama de secuencia}
+	\label{fig}
+\end{figure}
+\vspace{1cm}
+\section{C\'omo jugar?}
 \subsubsection{Keybinding}
 \begin{center}
 	\begin{tabular}{ |c|c| }
@@ -90,9 +99,9 @@ Toca hacerlo
 	\item Dirigase a la ruta en donde se encuentra el proyecto con nombre FlowFree.
 	\item Asegurese de tener python3 instalado y contar con las siguiente libreria :
 	      \begin{itemize}
-		      \item \textbf{Linux:}
+		      \item \textbf{Linux o MacOs:}
 		            \begin{itemize}
-			            \item curses
+			            \item El paquete ya viene instalado por default.
 		            \end{itemize}
 		      \item \textbf{Windows:}
 		            \begin{itemize}
@@ -115,6 +124,27 @@ Toca hacerlo
 			            \caption{Mapa}
 			            \label{fig}
 		            \end{figure}
+		            \begin{itemize}
+			            \item En la parte superior izquierda de la \textbf{Figura 3} se muestra las coordenanas actuales en donde se encuentra $(0,0)$.
+			            \item En la parte superior derecha de la \textbf{Figura 3} se muestra el n\'umero de ``flows'' que han sido completados.
+		            \end{itemize}
+		            \begin{enumerate}
+			            \item[1.] Al moverse de acuerdo a las Keybindings si se para en la posici\'on de alg\'un punto que este pintado de un color diferente al blanco y da ``enter'' el color se selecciona.
+				            \begin{figure}[H]
+					            \centerline{\includegraphics[scale=0.30]{chosen.jpg}}
+					            \caption{Color elegido}
+					            \label{fig}
+				            \end{figure}
+			            \item[2.] Una v\'ez elegido el color en la esquina superior izquierda de la pantalla de acuerdo a la \textbf{Figura 4} se mostrar\'a el color seleccionado.\\
+				            \begin{enumerate}
+					            \item[2.1] El usuario va poder moverse de acuerdo a las Keybidings y se pintar\'an los cuadros en la cuadr\'icula con el color seleccionado.
+					            \item[2.2] Para completar un ``flow'', el usuario debe moverse de acuerdo a las Keybindings y conectar el ``flow'' con el punto destino, una v\'ez lo complete el programa inmediatamente deselecciona el color previamente elegido.
+				            \end{enumerate}
+			            \item[3. ] El juego solo acaba cuando todos los ``flows'' est\'en completados y la cuadr\'icula no tenga ning\'un espacio vacio.
+			            \item[4. ] Tenga en cuenta que usted puede volver al menu principal en cualquier momento con la combinaci\'on Ctrl + c.
+
+
+		            \end{enumerate}
 		      \item \textbf{exit}: El proceso se termina.
 	      \end{itemize}
 
