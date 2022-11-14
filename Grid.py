@@ -43,7 +43,6 @@ class Grid:
                 i += 1
 
     def print_grid(self, stdsrc, x, y):
-        stdsrc.clear()
         hmax, wmax = stdsrc.getmaxyx()
         h = hmax//2 - self.rows
         w = wmax//2 - self.cols

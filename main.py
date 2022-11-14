@@ -1,9 +1,10 @@
 import curses
 import signal
-# from time import sleep
+from pprint import pprint as pp
 from Grid import Grid
+from Auto import Auto
 TEXT = "Flow Free"
-menu = ['Play',  'Exit']
+menu = ['Play', 'Auto',  'Exit']
 interrupted = False
 
 
@@ -48,6 +49,13 @@ def control_menu(stdscr):
                     grid.print_grid(stdscr, i, j)
                     key = stdscr.getch()
                     i, j = grid.grid_control(key, i, j)
+            elif menu[current_row_id] == 'Auto':
+                curses.endwin()
+                a = Auto()
+                a.drawGrid()
+                key = input('Press any key to continue...')
+                a.solvePuzzle()
+                exit(0)
         print_menu(stdscr, current_row_id)
 
 
