@@ -1,8 +1,8 @@
 import curses
+import random
 import signal
-from pprint import pprint as pp
 from Grid import Grid
-from Auto import Auto
+from Auto import Graph
 TEXT = "Flow Free"
 menu = ['Play', 'Auto',  'Exit']
 interrupted = False
@@ -45,16 +45,18 @@ def control_menu(stdscr):
                 i = 0
                 j = 0
                 grid = Grid()
-                while(not grid.finished() and not interrupted):
+                while not grid.finished() and not interrupted:
                     grid.print_grid(stdscr, i, j)
                     key = stdscr.getch()
                     i, j = grid.grid_control(key, i, j)
             elif menu[current_row_id] == 'Auto':
                 curses.endwin()
-                a = Auto()
-                a.drawGrid()
+                r = random.choice([i for i in range(1, 22)])
+                print(r)
+                g = Graph(r)
+                g.printGraph()
                 key = input('Press any key to continue...')
-                a.solvePuzzle()
+                g.solvePuzzleSmart()
                 exit(0)
         print_menu(stdscr, current_row_id)
 

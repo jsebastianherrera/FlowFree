@@ -33,8 +33,8 @@ class Grid:
                 else:
                     j = re.findall(pattern, line)
                     c = list()
-                    p1 = Point(self._colors[i-1], int(j[0]), int(j[1]))
-                    p2 = Point(self._colors[i-1], int(j[2]), int(j[3]))
+                    p1 = Point(self._colors[i-1], int(j[1]), int(j[0]))
+                    p2 = Point(self._colors[i-1], int(j[3]), int(j[2]))
                     self.starting_points.append(p1)
                     self.starting_points.append(p2)
                     c.append((p1, False))

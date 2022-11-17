@@ -1,187 +1,216 @@
-from colored import fg, attr, bg
 import re
-import random
+from queue import PriorityQueue
 
 
-class Auto:
-    def __init__(self):
-        self.grid = [[]]
-        self.startNodes = {}
-        self.endNodes = {}
-        self.allNodes = []
-        self.distances = {}
-        self._read_file(random.choice([i for i in range(1, 22)]))
-        self.rows = len(self.grid)
-        self.cols = len(self.grid[0])
-        self._init()
-        self._sortNodes()
+def includesSquare(symbol, nbors):
+    count = 0
+    for i in nbors:
+        if i.symbol == symbol:
+            count += 1
+    return count
 
-    def _read_file(self, number):
+
+class Node:
+    def __init__(self, symbol, x, y):
+        self.symbol = symbol
+        self.x = x
+        self.y = y
+        self.constrained = 0
+
+    def __str__(self):
+        return f"Symbol:{self.symbol}({self.x},{self.y})"
+
+
+class Graph:
+    def __init__(self, number):
+        self.graph = []  # double array of squares
+        self.xdim = 0  # x-dimension
+        self.ydim = 0  # y-dimension
+        self.colors = set(())  # all colors included in the graph
+        self.eCount = 0
+        self._fillGraphNodes(number)
+        self.squaresByConst = PriorityQueue()  # queue for smart alg
+        self.count = 0  # number of assignments
+        self.options = set(())  # domains
+        self.colors.remove('_')
+        for i in self.colors:  # create a list of lower case colors available
+            self.options.add(i.lower())
+
+    def _fillGraphNodes(self, number):
+        matrix = self._readFile(number)
+        for i in range(self.xdim):
+            data = []
+            for j in range(self.ydim):
+                val = matrix[i][j]
+                self.colors.add(val)
+                data.append(Node(val, i, j))
+            self.graph.append(data)
+
+    def _readFile(self, number) -> str:
+        matrix = [[]]
         pattern = "[0-9]+"
         with open(f"puzzles/flowfree_{number}.txt") as f:
             lines = f.readlines()
             i = 0
             for line in lines:
                 if i == 0:
-                    splited = line.split(' ')
-                    rows, cols = int(splited[1]), int(splited[2])
-                    self.grid = [[-1 for i in range(cols+2)]
-                                 for j in range(rows+2)]
+                    splitted = line.split(' ')
+                    _, self.xdim, self.ydim = (int(splitted[0]),
+                                               int(splitted[1]),
+                                               int(splitted[2]))
+                    matrix = [['_' for i in range(self.xdim)]
+                              for j in range(self.ydim)]
                 else:
                     j = re.findall(pattern, line)
-                    x1, y1 = int(j[0])+1, int(j[1])+1
-                    x2, y2 = int(j[2])+1, int(j[3])+1
-                    self.grid[x1][y1] = i
-                    self.grid[x2][y2] = i
+                    x, y = int(j[0]), int(j[1])
+                    x1, y1 = int(j[2]), int(j[3])
+                    matrix[x][y] = chr(i+64)
+                    matrix[x1][y1] = chr(i+64)
                 i += 1
-            for i in range(1, rows+1):
-                for j in range(1, cols+1):
-                    if self.grid[i][j] == -1:
-                        self.grid[i][j] = 0
+            return matrix
+        return matrix
 
-    def _init(self):
-        for row in range(1, self.rows-1):
-            for column in range(1, self.cols-1):
-                color = self.grid[row][column]
-                if color > 0:
-                    if color in self.startNodes:
-                        self.endNodes[color] = [row, column]
-                        self.distances[color] = abs(
-                            row-self.startNodes[color][0])
-                        + abs(column-self.startNodes[color][1])
+    def makeQueue(self):
+        # set constraints and set up max priority queue
+        if self.squaresByConst.qsize() > 0:
+            self.squaresByConst = PriorityQueue()
+        for i in range(self.xdim):
+            for j in range(self.ydim):
+                if self.graph[i][j].symbol == "_":
+                    self.graph[i][j].constrained = self.howConstrained(
+                        self.graph[i][j], self.findNeighbors(i, j))
+                    priorityNum = -self.graph[i][j].constrained
+                    # set up as max priority queue instead of min
+                    self.squaresByConst.put(
+                        ((priorityNum, self.eCount), self.graph[i][j]))
+                    self.eCount = self.eCount + 1
+
+    # get a list of possible colors organized by how often they appear in nbors
+    def countColors(self, nbors, options):
+        temp = list()
+        counts = PriorityQueue()
+        reordered = list()
+        for x in nbors:
+            temp.append(x.symbol.lower())
+
+        for x in options:
+            counts.put((-temp.count(x), x))
+        while not counts.empty():
+            hi = counts.get()
+            reordered.append(hi[1])
+
+        return reordered
+
+    def solvePuzzleSmart(self):  # uses the smart algorithm to solve the puzzle
+        self.count = 0
+
+        print("Unsolved Puzzle:")
+        self.printGraph()
+        self.makeQueue()
+
+        start = self.squaresByConst.get()[1]
+        # solve and determine if solution exists
+        if self.solveSquareSmart(start):
+            print("Solution:")
+            self.printGraph()
+
+        else:
+            print("No Solution.")
+        print("Assignments made: " + str(self.count))
+
+    def solveSquareSmart(self, current):
+        done = False  # keeps track of whether constraints are violated
+        x = current.x
+        y = current.y
+        nbors = self.findNeighbors(x, y)
+
+        # recurzive version
+        if self.graph[x][y].symbol != "_":  # not a filled square and not the last square
+            print("hi")
+            done = self.solveSquareSmart(self.squaresByConst.get()[1])
+        else:  # this square must be blank
+            # reorganize the colors prioritizing most occuring in nbors
+            self.options = self.countColors(nbors, self.options)
+            for i in self.options:  # loop through all possible colors, checking validity of each one
+                self.graph[x][y].symbol = i
+                self.count += 1
+                # make sure this doesn't violate any constraints
+                valid = self.checkConstraints(x, y, nbors)
+
+                if valid:
+                    blankNum = True  # means there are no blanks in the grid
+                    for i in range(self.xdim):
+                        for j in range(self.ydim):
+                            if self.graph[i][j].symbol == "_":
+                                blankNum = False  # found a blank
+                                break
+                    if self.squaresByConst.empty():  # we've reached a solution, so return
+                        return True
+                    elif blankNum:
+                        done = True
+                        return done
                     else:
-                        self.startNodes[color] = [row, column]
-                    self.allNodes.append([row, column, color])
+                        # update Constraints
+                        self.makeQueue()
+                        # recursively call the solve method on the next square
+                        done = self.solveSquareSmart(
+                            self.squaresByConst.get()[1])
 
-    def _sortNodes(self):
-        self.sortedNodes = []
-        keys = list(self.distances)
-        for i in range(0, len(self.distances)):
-            min = self.distances[keys[0]]
-            for key in self.distances:
-                if self.distances[key] < min:
-                    min = self.distances[key]
-            self.sortedNodes.append(key)
-            self.distances.pop(key)
+                        if done:  # end if we've reached a solution
+                            return done
+            if not done:  # rewrite over the symbol as blank of none of this options are valid
+                self.graph[x][y].symbol = '_'
+        return done  # return solution or not
 
-    def drawGrid(self):
-        for row in range(1, self.rows-1):
-            print('')
-            for column in range(1, self.cols-1):
-                pos = self.grid[row][column]
-                color = bg(pos) + fg(pos)
-                reset = attr('reset')
-                print(color + 'XX' + reset, end='')
-        print('\n\n')
+    def findNeighbors(self, x, y):  # returns all neighbors of a square in a list
+        nbors = list(())
+        if x > 0:
+            nbors.append(self.graph[x-1][y])
+        if y > 0:
+            nbors.append(self.graph[x][y-1])
+        if x < self.xdim - 1:
+            nbors.append(self.graph[x+1][y])
+        if y < self.ydim - 1:
+            nbors.append(self.graph[x][y+1])
+        return nbors
 
-    def _checkGrid(self):
-        for row in range(1, self.rows-1):
-            for column in range(1, self.cols-1):
-                if self.grid[row][column] > 0:
-                    color = self.grid[row][column]
-                    if (self.grid[row+1][column] > 0 and
-                            self.grid[row+1][column] != color):
-                        if (self.grid[row-1][column] > 0 and
-                                self.grid[row-1][column] != color):
-                            if (self.grid[row][column+1] > 0 and
-                                    self.grid[row][column+1] != color):
-                                if (self.grid[row][column-1] > 0 and
-                                        self.grid[row][column-1] != color):
-                                    return False
-                    if (self.grid[row+1][column] == color and
-                        self.grid[row-1][column] == color and
-                            self.grid[row][column+1] == color):
-                        return False
-                    elif (self.grid[row+1][column] == color and
-                          self.grid[row-1][column] == color and
-                          self.grid[row][column-1] == color):
-                        return False
-                    elif (self.grid[row+1][column] == color and
-                          self.grid[row][column+1] == color and
-                          self.grid[row][column-1] == color):
-                        return False
-                    elif (self.grid[row-1][column] == color and
-                          self.grid[row][column+1] == color and
-                          self.grid[row][column-1] == color):
-                        return False
-        return True
+        # determines how constrained by finding number of non-blank neighbors
+    def howConstrained(self, square, nbors):
+        count = 0
+        for i in self.options:
+            if self.checkConstraints(square.x, square.y, nbors):
+                count += 1
+        return len(self.options) - count
 
-    def _solved(self):
-        for row in range(1, self.rows-1):
-            for column in range(1, self.cols-1):
-                if self.grid[row][column] == 0:
-                    return False
-        return True
+    def checkConstraints(self, x, y, nbors):
+        valid = True  # check that placing this value in this square doesn't violate any neighboring constraints
+        nbors.append(self.graph[x][y])
+        for j in nbors:  # includes this square and all 4 of its neighbors
+            if j.symbol == "_":  # ignore blank spaces
+                continue
+            cnbors = self.findNeighbors(j.x, j.y)
+            if j.symbol.isupper():  # Make sure endpoints don't have more than one matching color coming out of them and that if it doesn't have any, that it has at least one blank adjacent square
+                symbolCount = includesSquare(j.symbol.lower(), cnbors)
+                blankCount = includesSquare("_", cnbors)
+                if symbolCount > 1:  # more than one of same color connecting
+                    valid = False
+                if blankCount == 0 and symbolCount != 1:  # no available ways to connect to endpoint
+                    valid = False
+            else:  # Symbol is not an endpoint, but we have to make sure it's not blocked in by other colors either
+                symbolCount = includesSquare(j.symbol, cnbors)
+                symbolCount += includesSquare(j.symbol.upper(), cnbors)
+                blankCount = includesSquare("_", cnbors)
+                if symbolCount > 2:  # too many of same color connecting
+                    valid = False
+                if symbolCount == 1 and blankCount < 1:  # not enough blank spaces to connect
+                    valid = False
+                if symbolCount == 0 and blankCount < 2:  # not enough blank spaces to connect
+                    valid = False
+        return valid
 
-    def solvePuzzle(self):
-        self.drawGrid()
-        if not self._checkGrid():
-            return False
-
-        if self._solved():
-            return True
-
-        for color in self.sortedNodes:
-            startNode = self.startNodes[color]
-            endNode = self.endNodes[color]
-            if (abs(endNode[0] - startNode[0]) +
-                    abs(endNode[1] - startNode[1]) > 1):
-                directions = []
-                if self.grid[startNode[0]][startNode[1]+1] == 0:
-                    if endNode[1] > startNode[1]:
-                        directions.insert(0, "right")  # Higher Priority
-                    else:
-                        directions.append("right")  # Lower Priority!
-                if self.grid[startNode[0]][startNode[1]-1] == 0:
-                    if endNode[1] < startNode[1]:
-                        directions.insert(0, "left")  # Higher Priority
-                    else:
-                        directions.append("left")  # Lower Priority!
-                if self.grid[startNode[0]+1][startNode[1]] == 0:
-                    if endNode[0] > startNode[0]:
-                        directions.insert(0, "down")  # Higher Priority
-                    else:
-                        directions.append("down")  # Lower Priority!
-                if self.grid[startNode[0]-1][startNode[1]] == 0:
-                    if endNode[0] < startNode[0]:
-                        directions.insert(0, "up")  # Higher Priority
-                    else:
-                        directions.append("up")  # Lower Priority!
-
-                if len(directions) == 0:
-                    return False
-                for direction in directions:
-                    if direction == "right":
-                        startNode[1] += 1
-                        self.grid[startNode[0]][startNode[1]] = color
-                        if self.solvePuzzle():
-                            return True
-                        else:
-                            self.grid[startNode[0]][startNode[1]] = 0
-                            startNode[1] -= 1
-
-                    elif direction == "left":
-                        startNode[1] -= 1
-                        self.grid[startNode[0]][startNode[1]] = color
-                        if self.solvePuzzle():
-                            return True
-                        else:
-                            self.grid[startNode[0]][startNode[1]] = 0
-                            startNode[1] += 1
-                    elif direction == "up":
-                        startNode[0] -= 1
-                        self.grid[startNode[0]][startNode[1]] = color
-                        if self.solvePuzzle():
-                            return True
-                        else:
-                            self.grid[startNode[0]][startNode[1]] = 0
-                            startNode[0] += 1
-                    elif direction == "down":
-                        startNode[0] += 1
-                        self.grid[startNode[0]][startNode[1]] = color
-                        if self.solvePuzzle():
-                            return True
-                        else:
-                            self.grid[startNode[0]][startNode[1]] = 0
-                            startNode[0] -= 1
-                return False
+    def printGraph(self):
+        for i in range(self.xdim):
+            line = ""
+            for j in range(self.ydim):
+                line += self.graph[i][j].symbol
+            print(line)
