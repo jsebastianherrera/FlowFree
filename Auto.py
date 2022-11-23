@@ -1,6 +1,6 @@
 import re
+import curses
 from queue import PriorityQueue
-from colored import fg, attr, bg
 
 
 class Node:
@@ -15,7 +15,8 @@ class Node:
 
 
 class Graph:
-    def __init__(self, number):
+    def __init__(self, number, stdscr):
+        self._stdscr = stdscr
         self.graph = []
         self.rows = 0
         self.cols = 0
@@ -93,21 +94,15 @@ class Graph:
 
     def solvePuzzleSmart(self):
         self.count = 0
-        print("Unsolved Puzzle:")
-        self.printGraph()
+        self.printGrid(self._stdscr)
         self._makeQueue()
 
         start = self.queue.get()[1]
         if self._solveSquareSmart(start):
-            print("Solution:")
-            self.printGraph()
-
-        else:
-            print("No Solution.")
-        print("Assignments made: " + str(self.count))
+            self.printGrid(self._stdscr)
 
     def _solveSquareSmart(self, current):
-        self.printGraph()
+        self.printGrid(self._stdscr)
         done = False
         x = current.x
         y = current.y
@@ -197,12 +192,22 @@ class Graph:
                     valid = False
         return valid
 
-    def printGraph(self):
-        for i in range(self.rows):
-            print("")
-            for j in range(self.cols):
-                symbol = ord(self.graph[i][j].symbol.lower())
-                color = bg(symbol) + fg(symbol)
-                reset = attr("reset")
-                print(color + "XX" + reset, end="")
-        print("\n")
+    def printGrid(self, stdsrc):
+        hmax, wmax = stdsrc.getmaxyx()
+        h = hmax//2 - self.rows
+        w = wmax//2 - self.cols
+        x_ = 0
+        for i in range(0, self.rows):
+            y_ = 0
+            for j in range(0, self.cols):
+                if self.graph[i][j].symbol != "_":
+                    text = self.graph[i][j].symbol.upper()
+                    stdsrc.addstr(h+y_, w+x_, text.upper()+text.upper(),
+                                  curses.color_pair(
+                        ord(self.graph[i][j].symbol.lower())))
+                else:
+                    stdsrc.addstr(h+y_, w+x_, '__',
+                                  curses.color_pair(2))
+                y_ += 2
+            x_ += 3
+        stdsrc.refresh()

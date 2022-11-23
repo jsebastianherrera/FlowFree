@@ -50,14 +50,13 @@ def control_menu(stdscr):
                     key = stdscr.getch()
                     i, j = grid.grid_control(key, i, j)
             elif menu[current_row_id] == 'Auto':
-                curses.endwin()
-                r = random.choice([i for i in range(1, 22)])
-                print(r)
-                g = Graph(r)
-                g.printGraph()
-                key = input('Press any key to continue...')
-                g.solvePuzzleSmart()
-                exit(0)
+                r = random.choice([i for i in range(1, 16)])
+                g = Graph(r, stdscr)
+                g.printGrid(stdscr)
+                key = stdscr.getch()
+                if key > 0:
+                    g.solvePuzzleSmart()
+                stdscr.getch()
         print_menu(stdscr, current_row_id)
 
 
@@ -70,7 +69,7 @@ def main(stdscr):
     curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_WHITE)
     curses.init_pair(3, curses.COLOR_BLACK, curses.COLOR_WHITE)
     for i in range(3, curses.COLORS):
-        curses.init_pair(i + 1, curses.COLOR_BLACK, i)
+        curses.init_pair(i + 1, i, i)
     control_menu(stdscr)
 
 
