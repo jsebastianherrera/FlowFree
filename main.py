@@ -50,12 +50,14 @@ def control_menu(stdscr):
                     key = stdscr.getch()
                     i, j = grid.grid_control(key, i, j)
             elif menu[current_row_id] == 'Auto':
-                r = random.choice([i for i in range(1, 16)])
+                r = random.choice([i for i in range(1, 14)])
+                stdscr.addstr(0, 0, str(r), curses.color_pair(1))
                 g = Graph(r, stdscr)
                 g.printGrid(stdscr)
                 key = stdscr.getch()
                 if key > 0:
-                    g.solvePuzzleSmart()
+                    g.solver(0, 0)
+                    g.printGrid(stdscr)
                 stdscr.getch()
         print_menu(stdscr, current_row_id)
 

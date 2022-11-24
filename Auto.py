@@ -21,9 +21,7 @@ class Graph:
         self.rows = 0
         self.cols = 0
         self.colors = set(())
-        self.eCount = 0
         self._fillGraphNodes(number)
-        self.queue = PriorityQueue()
         self.count = 0
         self.options = set(())
         self.colors.remove('_')
@@ -40,7 +38,7 @@ class Graph:
                 data.append(Node(val, i, j))
             self.graph.append(data)
 
-    def _readFile(self, number) -> str:
+    def _readFile(self, number):
         matrix = [[]]
         pattern = "[0-9]+"
         with open(f"puzzles/flowfree_{number}.txt") as f:
@@ -64,18 +62,13 @@ class Graph:
             return matrix
         return matrix
 
-    def _makeQueue(self):
-        if self.queue.qsize() > 0:
-            self.queue = PriorityQueue()
-        for i in range(self.rows):
-            for j in range(self.cols):
-                if self.graph[i][j].symbol == "_":
-                    self.graph[i][j].constrained = self._howConstrained(
-                        self.graph[i][j], self._findNeighbors(i, j))
-                    priorityNum = -self.graph[i][j].constrained
-                    self.queue.put(
-                        ((priorityNum, self.eCount), self.graph[i][j]))
-                    self.eCount = self.eCount + 1
+    def _getNext(self, x, y):
+        if x == self.rows - 1 and y == self.cols - 1:
+            return None
+        elif x == self.rows - 1:
+            return [0, y + 1]
+        else:
+            return [x + 1, y]
 
     def _countColors(self, nbors, options):
         temp = list()
@@ -92,48 +85,24 @@ class Graph:
 
         return reordered
 
-    def solvePuzzleSmart(self):
-        self.count = 0
-        self.printGrid(self._stdscr)
-        self._makeQueue()
-
-        start = self.queue.get()[1]
-        if self._solveSquareSmart(start):
-            self.printGrid(self._stdscr)
-
-    def _solveSquareSmart(self, current):
-        self.printGrid(self._stdscr)
+    def solver(self, x, y):
         done = False
-        x = current.x
-        y = current.y
+        nextSquare = self._getNext(x, y)
         nbors = self._findNeighbors(x, y)
-
-        if self.graph[x][y].symbol != "_":
-            done = self._solveSquareSmart(self.queue.get()[1])
+        self.printGrid(self._stdscr)
+        if self.graph[x][y].symbol != "_" and nextSquare is not None:
+            done = self.solver(nextSquare[0], nextSquare[1])
         else:
-            self.options = self._countColors(nbors, self.options)
             for i in self.options:
                 self.graph[x][y].symbol = i
                 self.count += 1
                 valid = self._checkConstraints(x, y, nbors)
-
                 if valid:
-                    blankNum = True
-                    for i in range(self.rows):
-                        for j in range(self.cols):
-                            if self.graph[i][j].symbol == "_":
-                                blankNum = False
-                                break
-                    if self.queue.empty():
+                    if nextSquare is None:
                         return True
-                    elif blankNum:
-                        done = True
-                        return done
                     else:
-                        self._makeQueue()
-                        done = self._solveSquareSmart(
-                            self.queue.get()[1])
-
+                        done = self.solver(
+                            nextSquare[0], nextSquare[1])
                         if done:
                             return done
             if not done:
