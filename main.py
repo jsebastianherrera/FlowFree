@@ -51,6 +51,7 @@ def control_menu(stdscr):
                     i, j = grid.grid_control(key, i, j)
             elif menu[current_row_id] == 'Auto':
                 r = random.choice([i for i in range(1, 14)])
+                stdscr.addstr(0, 0, str(r), curses.color_pair(3))
                 g = Graph(r, stdscr)
                 g.printGrid(stdscr)
                 key = stdscr.getch()
