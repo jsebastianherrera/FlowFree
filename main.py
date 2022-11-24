@@ -50,7 +50,7 @@ def control_menu(stdscr):
                     key = stdscr.getch()
                     i, j = grid.grid_control(key, i, j)
             elif menu[current_row_id] == 'Auto':
-                r = random.choice([i for i in range(1, 14)])
+                r = random.choice([i for i in range(1, 13)])
                 g = Graph(r, stdscr)
                 g.printGrid(stdscr)
                 key = stdscr.getch()

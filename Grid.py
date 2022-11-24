@@ -10,7 +10,7 @@ class Grid:
         self._enter = (False, None)
         self._points = {}
         self.starting_points = []
-        self._read_file(random.choice([i for i in range(1, 14)]))
+        self._read_file(random.choice([i for i in range(1, 13)]))
         self.grid = [[None for _ in range(self.rows)]
                      for _ in range(self.cols)]
         self._init_grid()
