@@ -70,7 +70,7 @@ def main(stdscr):
     curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_WHITE)
     curses.init_pair(3, curses.COLOR_BLACK, curses.COLOR_WHITE)
     for i in range(3, curses.COLORS):
-        curses.init_pair(i + 1, i, i)
+        curses.init_pair(i + 1, 0, i)
     control_menu(stdscr)
 
 
